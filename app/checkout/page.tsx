@@ -11,6 +11,7 @@ import { Card } from "@/components/atoms/Card";
 import { ArrowLeft, Lock, CreditCard } from "lucide-react";
 import Link from "next/link";
 import { ordersApi } from "@/lib/api";
+import { Order, WebpayResponse } from "@/types";
 
 export default function CheckoutPage() {
   const { items, getTotal, clearCart } = useCart();
@@ -51,10 +52,10 @@ export default function CheckoutPage() {
           quantity: item.quantity,
         })),
         paymentMethod: "webpay",
-      });
+      }) as Order;
 
       // Iniciar pago con Webpay
-      const webpayResponse = await ordersApi.initiateWebpay(order.id);
+      const webpayResponse = await ordersApi.initiateWebpay(order.id) as WebpayResponse;
 
       // Redirigir a Webpay
       if (webpayResponse.url) {

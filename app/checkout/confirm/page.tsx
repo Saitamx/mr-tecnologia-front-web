@@ -11,13 +11,14 @@ import { Card } from "@/components/atoms/Card";
 import { CheckCircle, XCircle, Loader2, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { ordersApi } from "@/lib/api";
+import { Order } from "@/types";
 
 export default function CheckoutConfirmPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { clearCart } = useCart();
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
-  const [order, setOrder] = useState<any>(null);
+  const [order, setOrder] = useState<Order | null>(null);
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function CheckoutConfirmPage() {
 
     const confirmPayment = async () => {
       try {
-        const confirmedOrder = await ordersApi.confirmWebpay(token);
+        const confirmedOrder = await ordersApi.confirmWebpay(token) as Order;
         setOrder(confirmedOrder);
         setStatus("success");
         clearCart();
