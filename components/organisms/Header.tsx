@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, Smartphone } from "lucide-react";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
 import { Button } from "../atoms/Button";
 import { NavLink } from "../molecules/NavLink";
 
@@ -33,8 +34,14 @@ export const Header = () => {
             href="/" 
             className="flex items-center gap-2 text-base sm:text-lg md:text-xl font-bold text-primary-700 hover:text-primary-800 transition-colors"
           >
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary-600 to-primary-700 rounded-lg flex items-center justify-center shadow-soft">
-              <Smartphone className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+            <div className="relative w-8 h-8 sm:w-10 sm:h-10 rounded-lg overflow-hidden flex-shrink-0">
+              <Image
+                src="/logo-mr-tecnologia.jpg"
+                alt="MR Tecnología"
+                fill
+                className="object-cover"
+                priority
+              />
             </div>
             <span className="hidden sm:inline">MR Tecnología</span>
             <span className="sm:hidden">MR Tech</span>

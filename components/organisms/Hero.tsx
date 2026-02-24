@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "../atoms/Button";
 import { Heading } from "../atoms/Heading";
 import { Text } from "../atoms/Text";
-import { Smartphone, Sparkles, MapPin } from "lucide-react";
+import { Sparkles, MapPin } from "lucide-react";
 
 export const Hero = () => {
   return (
@@ -22,7 +23,15 @@ export const Hero = () => {
             <div className="relative" suppressHydrationWarning>
               <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-float" suppressHydrationWarning></div>
               <div className="relative bg-white/10 backdrop-blur-sm p-4 sm:p-6 rounded-3xl border border-white/20 shadow-glow" suppressHydrationWarning>
-                <Smartphone className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 animate-scale-in" />
+                <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full overflow-hidden animate-scale-in">
+                  <Image
+                    src="/logo-mr-tecnologia.jpg"
+                    alt="MR Tecnología"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </div>
               </div>
             </div>
           </div>

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Smartphone, MapPin, Mail } from "lucide-react";
+import Image from "next/image";
+import { MapPin, Mail } from "lucide-react";
 import { Text } from "../atoms/Text";
 
 export const Footer = () => {
@@ -11,8 +12,13 @@ export const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary-600 to-primary-700 rounded-lg flex items-center justify-center">
-                <Smartphone className="w-6 h-6" />
+              <div className="relative w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+                <Image
+                  src="/logo-mr-tecnologia.jpg"
+                  alt="MR Tecnología"
+                  fill
+                  className="object-cover"
+                />
               </div>
               <span className="text-lg font-bold">MR Tecnología</span>
             </div>
