@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { HydrationFix } from "@/components/HydrationFix";
+import { CartProvider } from "@/contexts/CartContext";
 
 export const metadata: Metadata = {
   title: "MR Tecnología - Accesorios Tecnológicos",
@@ -84,7 +85,9 @@ export default function RootLayout({
           }}
         />
         <HydrationFix />
-        {children}
+        <CartProvider>
+          {children}
+        </CartProvider>
       </body>
     </html>
   );

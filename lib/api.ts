@@ -89,3 +89,20 @@ export const categoriesApi = {
   getBySlug: (slug: string) => apiClient.get(`/categories/slug/${slug}`),
   getAllWithProducts: () => apiClient.get('/categories/with-products'),
 };
+
+export const ordersApi = {
+  create: (data: any) => apiClient.post('/orders', data),
+  getAll: (filters?: { status?: string; paymentStatus?: string }) => {
+    const params = new URLSearchParams();
+    if (filters?.status) params.append('status', filters.status);
+    if (filters?.paymentStatus) params.append('paymentStatus', filters.paymentStatus);
+    const query = params.toString();
+    return apiClient.get(`/orders${query ? `?${query}` : ''}`);
+  },
+  getById: (id: string) => apiClient.get(`/orders/${id}`),
+  getByOrderNumber: (orderNumber: string) => apiClient.get(`/orders/number/${orderNumber}`),
+  initiateWebpay: (orderId: string) => apiClient.post(`/orders/${orderId}/webpay/init`),
+  confirmWebpay: (token: string) => apiClient.post('/orders/webpay/confirm', { token }),
+  updateStatus: (id: string, data: { status: string; paymentStatus?: string }) => 
+    apiClient.patch(`/orders/${id}/status`, data),
+};

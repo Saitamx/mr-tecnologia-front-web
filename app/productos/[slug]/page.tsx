@@ -8,18 +8,22 @@ import { Heading } from "@/components/atoms/Heading";
 import { Text } from "@/components/atoms/Text";
 import { productsApi } from "@/lib/api";
 import { Product } from "@/types";
-import { ArrowLeft, ShoppingBag, Package, Tag, Smartphone } from "lucide-react";
+import { ArrowLeft, ShoppingBag, Package, Tag, Smartphone, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/atoms/Button";
 import Link from "next/link";
 import Image from "next/image";
+import { useCart } from "@/contexts/CartContext";
 
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
+  const { addItem } = useCart();
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [quantity, setQuantity] = useState(1);
+  const [addingToCart, setAddingToCart] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -174,9 +178,62 @@ export default function ProductDetailPage() {
                 </div>
               </div>
 
-              {/* Botón de contacto (para tienda física) */}
-              <div className="pt-4">
-                <div className="bg-primary-50 border border-primary-200 rounded-xl p-4 mb-4">
+              {/* Agregar al carrito */}
+              <div className="pt-4 space-y-4">
+                {product.stock > 0 ? (
+                  <>
+                    <div className="flex items-center gap-4">
+                      <label className="text-sm font-medium text-gray-700">Cantidad:</label>
+                      <div className="flex items-center gap-2 border border-gray-300 rounded-lg">
+                        <button
+                          onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                          className="p-2 hover:bg-gray-100 transition-colors"
+                          disabled={quantity <= 1}
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
+                        <span className="px-4 py-2 min-w-[3rem] text-center font-semibold">
+                          {quantity}
+                        </span>
+                        <button
+                          onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
+                          className="p-2 hover:bg-gray-100 transition-colors"
+                          disabled={quantity >= product.stock}
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                    <Button
+                      className="w-full"
+                      onClick={() => {
+                        setAddingToCart(true);
+                        addItem(product, quantity);
+                        setTimeout(() => {
+                          setAddingToCart(false);
+                          alert("Producto agregado al carrito");
+                        }, 500);
+                      }}
+                      disabled={addingToCart}
+                    >
+                      {addingToCart ? (
+                        "Agregando..."
+                      ) : (
+                        <>
+                          <ShoppingBag className="w-5 h-5 mr-2" />
+                          Agregar al carrito
+                        </>
+                      )}
+                    </Button>
+                  </>
+                ) : (
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                    <Text className="text-sm text-red-700 text-center">
+                      Producto sin stock disponible
+                    </Text>
+                  </div>
+                )}
+                <div className="bg-primary-50 border border-primary-200 rounded-xl p-4">
                   <Text className="text-sm text-gray-700 text-center">
                     💬 Para consultas sobre este producto, visítanos en nuestra tienda física en Versluys SPP
                   </Text>

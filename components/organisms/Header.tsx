@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { Button } from "../atoms/Button";
 import { NavLink } from "../molecules/NavLink";
+import { CartIcon } from "../molecules/CartIcon";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,23 +48,29 @@ export const Header = () => {
             <span className="sm:hidden">MR Tech</span>
           </Link>
           
-          <nav className="hidden lg:flex items-center gap-1" suppressHydrationWarning>
-            <NavLink href="/">Inicio</NavLink>
-            <NavLink href="/productos">Productos</NavLink>
-            <NavLink href="/categorias">Categorías</NavLink>
-          </nav>
+          <div className="hidden lg:flex items-center gap-4" suppressHydrationWarning>
+            <nav className="flex items-center gap-1" suppressHydrationWarning>
+              <NavLink href="/">Inicio</NavLink>
+              <NavLink href="/productos">Productos</NavLink>
+              <NavLink href="/categorias">Categorías</NavLink>
+            </nav>
+            <CartIcon />
+          </div>
           
-          <button
-            className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
+          <div className="lg:hidden flex items-center gap-2">
+            <CartIcon />
+            <button
+              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </button>
+          </div>
         </div>
         
         <div 
