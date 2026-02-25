@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Button } from "@/components/atoms/Button";
 import { Heading } from "@/components/atoms/Heading";
@@ -14,7 +15,12 @@ import {
   Palette,
   Gift
 } from "lucide-react";
-import { ThreeBackground } from "./ThreeBackground";
+
+// Importar ThreeBackground solo en el cliente
+const ThreeBackground = dynamic(() => import("./ThreeBackground").then(mod => ({ default: mod.ThreeBackground })), {
+  ssr: false,
+  loading: () => null,
+});
 
 export const Hero = () => {
   const [mounted, setMounted] = useState(false);
@@ -25,7 +31,7 @@ export const Hero = () => {
 
   return (
     <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-50 via-white to-primary-100">
-      <ThreeBackground />
+      {mounted && <ThreeBackground />}
       
       {/* Gradientes decorativos */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
