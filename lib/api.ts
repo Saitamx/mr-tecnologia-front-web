@@ -20,13 +20,18 @@ class ApiClient {
   private async request<T>(
     endpoint: string,
     options?: RequestInit,
+    customHeaders?: Record<string, string>,
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
+    const token = typeof window !== 'undefined' ? localStorage.getItem('customer_token') : null;
+    
     try {
       const response = await fetch(url, {
         ...options,
         headers: {
           'Content-Type': 'application/json',
+          ...(token && { Authorization: `Bearer ${token}` }),
+          ...customHeaders,
           ...options?.headers,
         },
       });
@@ -50,15 +55,15 @@ class ApiClient {
     }
   }
 
-  async get<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'GET' });
+  async get<T>(endpoint: string, customHeaders?: Record<string, string>): Promise<T> {
+    return this.request<T>(endpoint, { method: 'GET' }, customHeaders);
   }
 
-  async post<T>(endpoint: string, data?: unknown): Promise<T> {
+  async post<T>(endpoint: string, data?: unknown, customHeaders?: Record<string, string>): Promise<T> {
     return this.request<T>(endpoint, {
       method: 'POST',
       body: JSON.stringify(data),
-    });
+    }, customHeaders);
   }
 
   async patch<T>(endpoint: string, data?: unknown): Promise<T> {
@@ -105,4 +110,13 @@ export const ordersApi = {
   confirmWebpay: (token: string) => apiClient.post('/orders/webpay/confirm', { token }),
   updateStatus: (id: string, data: { status: string; paymentStatus?: string }) => 
     apiClient.patch(`/orders/${id}/status`, data),
+};
+
+export const customersApi = {
+  register: (data: any) => apiClient.post('/customers/register', data),
+  login: (data: { email: string; password: string }) => apiClient.post('/customers/login', data),
+  getProfile: () => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('customer_token') : null;
+    return apiClient.get('/customers/me', token ? { Authorization: `Bearer ${token}` } : {});
+  },
 };

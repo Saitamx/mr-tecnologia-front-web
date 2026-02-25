@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { PageTemplate } from "@/components/templates/PageTemplate";
 import { useCart } from "@/contexts/CartContext";
 import { useNotification } from "@/contexts/NotificationContext";
+import { useCustomer } from "@/contexts/CustomerContext";
 import { Heading } from "@/components/atoms/Heading";
 import { Text } from "@/components/atoms/Text";
 import { Button } from "@/components/atoms/Button";
@@ -17,6 +18,7 @@ import { Order, WebpayResponse } from "@/types";
 export default function CheckoutPage() {
   const { items, getTotal, clearCart } = useCart();
   const notification = useNotification();
+  const { isAuthenticated } = useCustomer();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({

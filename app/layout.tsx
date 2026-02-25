@@ -3,6 +3,7 @@ import "./globals.css";
 import { HydrationFix } from "@/components/HydrationFix";
 import { CartProvider } from "@/contexts/CartContext";
 import { NotificationProvider } from "@/contexts/NotificationContext";
+import { CustomerProvider } from "@/contexts/CustomerContext";
 
 export const metadata: Metadata = {
   title: "MR Tecnología - Accesorios Tecnológicos",
@@ -87,9 +88,11 @@ export default function RootLayout({
         />
         <HydrationFix />
         <NotificationProvider>
-          <CartProvider>
-            {children}
-          </CartProvider>
+          <CustomerProvider>
+            <CartProvider>
+              {children}
+            </CartProvider>
+          </CustomerProvider>
         </NotificationProvider>
       </body>
     </html>

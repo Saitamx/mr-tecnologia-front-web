@@ -7,10 +7,13 @@ import { Menu, X } from "lucide-react";
 import { Button } from "../atoms/Button";
 import { NavLink } from "../molecules/NavLink";
 import { CartIcon } from "../molecules/CartIcon";
+import { useCustomer } from "@/contexts/CustomerContext";
+import { User, LogOut } from "lucide-react";
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { customer, isAuthenticated, logout } = useCustomer();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,6 +58,30 @@ export const Header = () => {
               <NavLink href="/categorias">Categorías</NavLink>
             </nav>
             <CartIcon />
+            {isAuthenticated ? (
+              <div className="flex items-center gap-2">
+                <Link href="/mi-cuenta" className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:text-primary-600 transition-colors">
+                  <User className="w-4 h-4" />
+                  <span className="hidden xl:inline">{customer?.fullName}</span>
+                </Link>
+                <button
+                  onClick={logout}
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:text-red-600 transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="hidden xl:inline">Salir</span>
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Link href="/login">
+                  <Button variant="ghost" size="sm">Iniciar sesión</Button>
+                </Link>
+                <Link href="/register">
+                  <Button size="sm">Registrarse</Button>
+                </Link>
+              </div>
+            )}
           </div>
           
           <div className="lg:hidden flex items-center gap-2">
@@ -84,6 +111,34 @@ export const Header = () => {
               <NavLink href="/" className="block py-2 px-3 rounded-lg">Inicio</NavLink>
               <NavLink href="/productos" className="block py-2 px-3 rounded-lg">Productos</NavLink>
               <NavLink href="/categorias" className="block py-2 px-3 rounded-lg">Categorías</NavLink>
+              {isAuthenticated ? (
+                <>
+                  <Link href="/mi-cuenta" className="block py-2 px-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                    <div className="flex items-center gap-2">
+                      <User className="w-4 h-4" />
+                      <span>Mi cuenta</span>
+                    </div>
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="block py-2 px-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-600 transition-colors text-left w-full"
+                  >
+                    <div className="flex items-center gap-2">
+                      <LogOut className="w-4 h-4" />
+                      <span>Cerrar sesión</span>
+                    </div>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className="block py-2 px-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                    Iniciar sesión
+                  </Link>
+                  <Link href="/register" className="block py-2 px-3 rounded-lg bg-primary-600 text-white hover:bg-primary-700 transition-colors text-center">
+                    Registrarse
+                  </Link>
+                </>
+              )}
             </div>
           </nav>
         </div>
