@@ -25,6 +25,25 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validaciones del frontend
+    if (!formData.email.trim()) {
+      notification.showError("Por favor, ingresa tu email");
+      return;
+    }
+
+    // Validación básica de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      notification.showError("Por favor, ingresa un email válido");
+      return;
+    }
+
+    if (!formData.password.trim()) {
+      notification.showError("Por favor, ingresa tu contraseña");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -45,7 +64,25 @@ export default function LoginPage() {
       }, 1000);
     } catch (error: any) {
       console.error("Error al iniciar sesión:", error);
-      notification.showError(error.message || "Credenciales inválidas. Por favor, intenta nuevamente.");
+      
+      // Mensajes de error más específicos
+      let errorMessage = "Error al iniciar sesión. Por favor, intenta nuevamente.";
+      
+      if (error.status === 401) {
+        errorMessage = "Email o contraseña incorrectos. Verifica tus credenciales e intenta nuevamente.";
+      } else if (error.status === 400) {
+        errorMessage = "Por favor, completa todos los campos correctamente.";
+      } else if (error.status === 404) {
+        errorMessage = "Usuario no encontrado. Verifica tu email o regístrate si no tienes cuenta.";
+      } else if (error.message && error.message.includes("Credenciales")) {
+        errorMessage = "Email o contraseña incorrectos. Verifica tus credenciales e intenta nuevamente.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      } else if (error.error?.message) {
+        errorMessage = error.error.message;
+      }
+      
+      notification.showError(errorMessage);
       setLoading(false);
     }
   };

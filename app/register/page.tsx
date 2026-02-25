@@ -32,6 +32,29 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Validaciones del frontend
+    if (!formData.fullName.trim()) {
+      notification.showError("Por favor, ingresa tu nombre completo");
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      notification.showError("Por favor, ingresa tu email");
+      return;
+    }
+
+    // Validación básica de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      notification.showError("Por favor, ingresa un email válido");
+      return;
+    }
+
+    if (!formData.phone.trim()) {
+      notification.showError("Por favor, ingresa tu teléfono");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       notification.showError("Las contraseñas no coinciden");
       return;
@@ -66,7 +89,23 @@ export default function RegisterPage() {
       }, 1500);
     } catch (error: any) {
       console.error("Error al registrar:", error);
-      notification.showError(error.message || "Error al registrar. Por favor, intenta nuevamente.");
+      
+      // Mensajes de error más específicos
+      let errorMessage = "Error al registrar. Por favor, intenta nuevamente.";
+      
+      if (error.status === 409) {
+        errorMessage = "Este email ya está registrado. ¿Ya tienes una cuenta? Inicia sesión o usa otro email.";
+      } else if (error.status === 400) {
+        errorMessage = error.message || "Por favor, completa todos los campos requeridos correctamente.";
+      } else if (error.status === 401) {
+        errorMessage = "No se pudo crear la cuenta. Verifica tus datos e intenta nuevamente.";
+      } else if (error.message) {
+        errorMessage = error.message;
+      } else if (error.error?.message) {
+        errorMessage = error.error.message;
+      }
+      
+      notification.showError(errorMessage);
       setLoading(false);
     }
   };

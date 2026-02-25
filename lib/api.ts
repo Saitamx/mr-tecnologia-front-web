@@ -40,7 +40,24 @@ class ApiClient {
         const errorData = await response.json().catch(() => ({ 
           message: `Error HTTP: ${response.status} ${response.statusText}` 
         }));
-        const error = new Error(errorData.message || errorData.error || `HTTP error! status: ${response.status}`);
+        
+        // Extraer mensaje de error más específico
+        let errorMessage = errorData.message || errorData.error || `Error HTTP: ${response.status}`;
+        
+        // Mensajes personalizados según el código de estado
+        if (response.status === 409) {
+          errorMessage = errorData.message || 'Este email ya está registrado. Por favor, inicia sesión o usa otro email.';
+        } else if (response.status === 401) {
+          errorMessage = errorData.message || 'Credenciales inválidas. Verifica tu email y contraseña.';
+        } else if (response.status === 400) {
+          errorMessage = errorData.message || errorData.error || 'Datos inválidos. Por favor, verifica la información ingresada.';
+        } else if (response.status === 404) {
+          errorMessage = errorData.message || 'Recurso no encontrado.';
+        } else if (response.status >= 500) {
+          errorMessage = 'Error del servidor. Por favor, intenta más tarde.';
+        }
+        
+        const error = new Error(errorMessage);
         (error as any).status = response.status;
         (error as any).error = errorData;
         throw error;
