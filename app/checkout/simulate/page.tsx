@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { PageTemplate } from "@/components/templates/PageTemplate";
 import { Heading } from "@/components/atoms/Heading";
@@ -10,7 +10,7 @@ import { Card } from "@/components/atoms/Card";
 import { CreditCard, CheckCircle } from "lucide-react";
 import { ordersApi } from "@/lib/api";
 
-export default function WebpaySimulatePage() {
+function WebpaySimulateContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get("token");
@@ -95,5 +95,24 @@ export default function WebpaySimulatePage() {
         </div>
       </div>
     </PageTemplate>
+  );
+}
+
+export default function WebpaySimulatePage() {
+  return (
+    <Suspense fallback={
+      <PageTemplate>
+        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="max-w-md mx-auto text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-600 mx-auto mb-6"></div>
+              <Heading level={1} className="mb-4">Cargando...</Heading>
+            </div>
+          </div>
+        </div>
+      </PageTemplate>
+    }>
+      <WebpaySimulateContent />
+    </Suspense>
   );
 }
