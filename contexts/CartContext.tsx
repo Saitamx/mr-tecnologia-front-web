@@ -12,8 +12,8 @@ interface CartItem {
 interface CartContextType {
   items: CartItem[];
   addItem: (product: Product, quantity?: number, showNotification?: boolean) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  removeItem: (productId: string, showNotification?: boolean) => void;
+  updateQuantity: (productId: string, quantity: number, showNotification?: boolean) => void;
   clearCart: () => void;
   getTotal: () => number;
   getItemCount: () => number;
@@ -23,6 +23,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const notification = useNotification();
 
   // Cargar carrito desde localStorage al montar
   useEffect(() => {
@@ -49,9 +50,19 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         // Si el producto ya está en el carrito, actualizar cantidad
         const newQuantity = existingItem.quantity + quantity;
         if (newQuantity > product.stock) {
-          // La notificación se mostrará desde el componente que llama
+          if (showNotification) {
+            notification.showWarning(`⚠️ Solo hay ${product.stock} unidades disponibles de ${product.name}`);
+          }
           return prevItems;
         }
+        
+        if (showNotification) {
+          notification.showSuccess(
+            `✅ ¡${product.name} agregado al carrito! (Total: ${newQuantity} ${newQuantity === 1 ? 'unidad' : 'unidades'})`,
+            3500
+          );
+        }
+        
         return prevItems.map((item) =>
           item.product.id === product.id
             ? { ...item, quantity: newQuantity }
@@ -60,28 +71,46 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       } else {
         // Si el producto no está en el carrito, agregarlo
         if (quantity > product.stock) {
-          // La notificación se mostrará desde el componente que llama
+          if (showNotification) {
+            notification.showWarning(`⚠️ Solo hay ${product.stock} unidades disponibles de ${product.name}`);
+          }
           return prevItems;
         }
+        
+        if (showNotification) {
+          const message = quantity === 1 
+            ? `✅ ¡${product.name} agregado al carrito! 🛒`
+            : `✅ ¡${quantity} unidades de ${product.name} agregadas al carrito! 🛒`;
+          notification.showSuccess(message, 3500);
+        }
+        
         return [...prevItems, { product, quantity }];
       }
     });
   };
 
-  const removeItem = (productId: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item.product.id !== productId));
+  const removeItem = (productId: string, showNotification: boolean = true) => {
+    setItems((prevItems) => {
+      const item = prevItems.find((item) => item.product.id === productId);
+      if (item && showNotification) {
+        notification.showSuccess(`${item.product.name} eliminado del carrito`, 2500);
+      }
+      return prevItems.filter((item) => item.product.id !== productId);
+    });
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (productId: string, quantity: number, showNotification: boolean = false) => {
     if (quantity <= 0) {
-      removeItem(productId);
+      removeItem(productId, showNotification);
       return;
     }
 
     setItems((prevItems) => {
       const item = prevItems.find((item) => item.product.id === productId);
       if (item && quantity > item.product.stock) {
-        // La notificación se mostrará desde el componente que llama
+        if (showNotification) {
+          notification.showWarning(`Solo hay ${item.product.stock} unidades disponibles de ${item.product.name}`);
+        }
         return prevItems;
       }
 

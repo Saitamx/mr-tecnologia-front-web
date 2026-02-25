@@ -215,7 +215,6 @@ export default function ProductDetailPage() {
                         }
                         setAddingToCart(true);
                         addItem(product, quantity, true);
-                        notification.showSuccess(`¡${product.name} agregado al carrito!`);
                         setTimeout(() => {
                           setAddingToCart(false);
                         }, 500);
@@ -223,7 +222,10 @@ export default function ProductDetailPage() {
                       disabled={addingToCart}
                     >
                       {addingToCart ? (
-                        "Agregando..."
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Agregando...
+                        </>
                       ) : (
                         <>
                           <ShoppingBag className="w-5 h-5 mr-2" />

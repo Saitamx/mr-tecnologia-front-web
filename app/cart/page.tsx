@@ -136,8 +136,7 @@ export default function CartPage() {
 
                         <button
                           onClick={() => {
-                            removeItem(item.product.id);
-                            notification.showInfo(`${item.product.name} eliminado del carrito`);
+                            removeItem(item.product.id, true);
                           }}
                           className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                           aria-label="Eliminar producto"
