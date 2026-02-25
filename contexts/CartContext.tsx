@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Product } from "@/types";
+import { useNotification } from "./NotificationContext";
 
 interface CartItem {
   product: Product;
@@ -10,7 +11,7 @@ interface CartItem {
 
 interface CartContextType {
   items: CartItem[];
-  addItem: (product: Product, quantity?: number) => void;
+  addItem: (product: Product, quantity?: number, showNotification?: boolean) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -40,7 +41,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("cart", JSON.stringify(items));
   }, [items]);
 
-  const addItem = (product: Product, quantity: number = 1) => {
+  const addItem = (product: Product, quantity: number = 1, showNotification: boolean = true) => {
     setItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.product.id === product.id);
 
@@ -48,7 +49,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         // Si el producto ya está en el carrito, actualizar cantidad
         const newQuantity = existingItem.quantity + quantity;
         if (newQuantity > product.stock) {
-          alert(`Solo hay ${product.stock} unidades disponibles`);
+          // La notificación se mostrará desde el componente que llama
           return prevItems;
         }
         return prevItems.map((item) =>
@@ -59,7 +60,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       } else {
         // Si el producto no está en el carrito, agregarlo
         if (quantity > product.stock) {
-          alert(`Solo hay ${product.stock} unidades disponibles`);
+          // La notificación se mostrará desde el componente que llama
           return prevItems;
         }
         return [...prevItems, { product, quantity }];
@@ -80,7 +81,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((prevItems) => {
       const item = prevItems.find((item) => item.product.id === productId);
       if (item && quantity > item.product.stock) {
-        alert(`Solo hay ${item.product.stock} unidades disponibles`);
+        // La notificación se mostrará desde el componente que llama
         return prevItems;
       }
 

@@ -2,6 +2,7 @@
 
 import { PageTemplate } from "@/components/templates/PageTemplate";
 import { useCart } from "@/contexts/CartContext";
+import { useNotification } from "@/contexts/NotificationContext";
 import { Heading } from "@/components/atoms/Heading";
 import { Text } from "@/components/atoms/Text";
 import { Button } from "@/components/atoms/Button";
@@ -13,6 +14,7 @@ import { useRouter } from "next/navigation";
 
 export default function CartPage() {
   const { items, updateQuantity, removeItem, getTotal, clearCart } = useCart();
+  const notification = useNotification();
   const router = useRouter();
 
   const formatPrice = (price: number) => {
@@ -98,7 +100,11 @@ export default function CartPage() {
                       <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2 border border-gray-300 rounded-lg">
                           <button
-                            onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                            onClick={() => {
+                              if (item.quantity > 1) {
+                                updateQuantity(item.product.id, item.quantity - 1);
+                              }
+                            }}
                             className="p-2 hover:bg-gray-100 transition-colors"
                             disabled={item.quantity <= 1}
                           >
@@ -108,7 +114,13 @@ export default function CartPage() {
                             {item.quantity}
                           </span>
                           <button
-                            onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                            onClick={() => {
+                              if (item.quantity >= item.product.stock) {
+                                notification.showWarning(`Solo hay ${item.product.stock} unidades disponibles`);
+                                return;
+                              }
+                              updateQuantity(item.product.id, item.quantity + 1);
+                            }}
                             className="p-2 hover:bg-gray-100 transition-colors"
                             disabled={item.quantity >= item.product.stock}
                           >
@@ -123,7 +135,10 @@ export default function CartPage() {
                         </div>
 
                         <button
-                          onClick={() => removeItem(item.product.id)}
+                          onClick={() => {
+                            removeItem(item.product.id);
+                            notification.showInfo(`${item.product.name} eliminado del carrito`);
+                          }}
                           className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                           aria-label="Eliminar producto"
                         >
@@ -136,7 +151,14 @@ export default function CartPage() {
               ))}
 
               <div className="flex justify-end">
-                <Button variant="ghost" onClick={clearCart} className="text-red-600 hover:text-red-700">
+                <Button 
+                  variant="ghost" 
+                  onClick={() => {
+                    clearCart();
+                    notification.showInfo("Carrito limpiado");
+                  }} 
+                  className="text-red-600 hover:text-red-700"
+                >
                   Limpiar carrito
                 </Button>
               </div>

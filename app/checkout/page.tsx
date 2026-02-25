@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { PageTemplate } from "@/components/templates/PageTemplate";
 import { useCart } from "@/contexts/CartContext";
+import { useNotification } from "@/contexts/NotificationContext";
 import { Heading } from "@/components/atoms/Heading";
 import { Text } from "@/components/atoms/Text";
 import { Button } from "@/components/atoms/Button";
@@ -15,6 +16,7 @@ import { Order, WebpayResponse } from "@/types";
 
 export default function CheckoutPage() {
   const { items, getTotal, clearCart } = useCart();
+  const notification = useNotification();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -65,7 +67,7 @@ export default function CheckoutPage() {
       }
     } catch (error: any) {
       console.error("Error al procesar orden:", error);
-      alert(error.message || "Error al procesar la orden. Por favor, intenta nuevamente.");
+      notification.showError(error.message || "Error al procesar la orden. Por favor, intenta nuevamente.");
       setLoading(false);
     }
   };

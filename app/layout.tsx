@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { HydrationFix } from "@/components/HydrationFix";
 import { CartProvider } from "@/contexts/CartContext";
+import { NotificationProvider } from "@/contexts/NotificationContext";
 
 export const metadata: Metadata = {
   title: "MR Tecnología - Accesorios Tecnológicos",
@@ -85,9 +86,11 @@ export default function RootLayout({
           }}
         />
         <HydrationFix />
-        <CartProvider>
-          {children}
-        </CartProvider>
+        <NotificationProvider>
+          <CartProvider>
+            {children}
+          </CartProvider>
+        </NotificationProvider>
       </body>
     </html>
   );

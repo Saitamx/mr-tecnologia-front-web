@@ -9,10 +9,12 @@ import { Button } from "@/components/atoms/Button";
 import { Card } from "@/components/atoms/Card";
 import { CreditCard, CheckCircle } from "lucide-react";
 import { ordersApi } from "@/lib/api";
+import { useNotification } from "@/contexts/NotificationContext";
 
 function WebpaySimulateContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const notification = useNotification();
   const token = searchParams.get("token");
   const [loading, setLoading] = useState(false);
 
@@ -27,7 +29,7 @@ function WebpaySimulateContent() {
       router.push(`/checkout/confirm?token=${token}`);
     } catch (error: any) {
       console.error("Error al aprobar pago:", error);
-      alert("Error al procesar el pago. Por favor, intenta nuevamente.");
+      notification.showError("Error al procesar el pago. Por favor, intenta nuevamente.");
       setLoading(false);
     }
   };

@@ -13,12 +13,14 @@ import { Button } from "@/components/atoms/Button";
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/contexts/CartContext";
+import { useNotification } from "@/contexts/NotificationContext";
 
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
   const slug = params.slug as string;
   const { addItem } = useCart();
+  const notification = useNotification();
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -207,11 +209,15 @@ export default function ProductDetailPage() {
                     <Button
                       className="w-full"
                       onClick={() => {
+                        if (quantity > product.stock) {
+                          notification.showWarning(`Solo hay ${product.stock} unidades disponibles`);
+                          return;
+                        }
                         setAddingToCart(true);
-                        addItem(product, quantity);
+                        addItem(product, quantity, true);
+                        notification.showSuccess(`¡${product.name} agregado al carrito!`);
                         setTimeout(() => {
                           setAddingToCart(false);
-                          alert("Producto agregado al carrito");
                         }, 500);
                       }}
                       disabled={addingToCart}
