@@ -29,6 +29,19 @@ export interface Category {
   updatedAt: string;
 }
 
+export interface OrderItem {
+  id: string;
+  orderId?: string;
+  productId: string;
+  productName: string;
+  unitPrice: number;
+  quantity: number;
+  subtotal: number;
+  product?: Product;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Order {
   id: string;
   orderNumber: string;
@@ -45,6 +58,7 @@ export interface Order {
   webpayToken?: string;
   webpayTransactionId?: string;
   notes?: string;
+   items?: OrderItem[];
   createdAt: string;
   updatedAt: string;
 }
