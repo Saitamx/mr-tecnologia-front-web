@@ -17,28 +17,82 @@ import {
 export const Hero = () => {
   return (
     <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-50 via-white to-primary-100">
-      {/* Partículas animadas con CSS */}
+      {/* Fondo animado moderno */}
       <div className="absolute inset-0 w-full h-full -z-10 overflow-hidden">
-        {[...Array(50)].map((_, i) => (
+        {/* Gradientes de fondo animados */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-100/50 via-blue-50/30 to-purple-100/50"></div>
+        
+        {/* Círculos grandes animados */}
+        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-primary-300/20 to-blue-400/20 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-purple-300/20 to-pink-400/20 rounded-full blur-3xl animate-float-slow" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-br from-blue-300/15 to-cyan-400/15 rounded-full blur-3xl animate-float-slow" style={{ animationDelay: '4s' }}></div>
+        
+        {/* Partículas pequeñas brillantes */}
+        {[...Array(80)].map((_, i) => {
+          const size = Math.random() * 6 + 2;
+          const delay = Math.random() * 8;
+          const duration = Math.random() * 4 + 3;
+          const left = Math.random() * 100;
+          const top = Math.random() * 100;
+          const shape = Math.random() > 0.7 ? 'square' : 'circle';
+          
+          return (
+            <div
+              key={i}
+              className={`absolute ${shape === 'circle' ? 'rounded-full' : 'rounded-lg'} bg-gradient-to-br from-primary-400/40 via-blue-400/30 to-purple-400/40 animate-particle-float shadow-lg shadow-primary-300/50`}
+              style={{
+                left: `${left}%`,
+                top: `${top}%`,
+                width: `${size}px`,
+                height: `${size}px`,
+                animationDelay: `${delay}s`,
+                animationDuration: `${duration}s`,
+                transform: `rotate(${Math.random() * 360}deg)`,
+              }}
+            />
+          );
+        })}
+        
+        {/* Líneas de conexión animadas */}
+        {[...Array(15)].map((_, i) => (
           <div
-            key={i}
-            className="absolute rounded-full bg-primary-400/20 animate-float"
+            key={`line-${i}`}
+            className="absolute w-px bg-gradient-to-b from-primary-300/20 via-blue-300/30 to-transparent animate-line-glow"
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
-              width: `${Math.random() * 4 + 2}px`,
-              height: `${Math.random() * 4 + 2}px`,
+              height: `${Math.random() * 200 + 100}px`,
               animationDelay: `${Math.random() * 5}s`,
               animationDuration: `${Math.random() * 3 + 2}s`,
+              transform: `rotate(${Math.random() * 360}deg)`,
             }}
           />
         ))}
-      </div>
-      
-      {/* Gradientes decorativos */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-200/30 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        
+        {/* Formas geométricas flotantes */}
+        {[...Array(12)].map((_, i) => {
+          const shapes = ['triangle', 'square', 'hexagon'];
+          const shape = shapes[Math.floor(Math.random() * shapes.length)];
+          const size = Math.random() * 40 + 20;
+          
+          return (
+            <div
+              key={`shape-${i}`}
+              className={`absolute animate-shape-float ${shape === 'triangle' ? 'triangle' : shape === 'hexagon' ? 'hexagon' : 'square-shape'} bg-gradient-to-br from-primary-400/20 to-blue-400/20 backdrop-blur-sm border border-primary-300/30`}
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                width: `${size}px`,
+                height: `${size}px`,
+                animationDelay: `${Math.random() * 6}s`,
+                animationDuration: `${Math.random() * 5 + 4}s`,
+              }}
+            />
+          );
+        })}
+        
+        {/* Efecto de brillo móvil */}
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-primary-200/10 to-transparent animate-shimmer"></div>
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
