@@ -104,6 +104,10 @@ export const ordersApi = {
     const query = params.toString();
     return apiClient.get(`/orders${query ? `?${query}` : ''}`);
   },
+  getMyOrders: () => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('customer_token') : null;
+    return apiClient.get('/orders/my-orders', token ? { Authorization: `Bearer ${token}` } : {});
+  },
   getById: (id: string) => apiClient.get(`/orders/${id}`),
   getByOrderNumber: (orderNumber: string) => apiClient.get(`/orders/number/${orderNumber}`),
   initiateWebpay: (orderId: string) => apiClient.post(`/orders/${orderId}/webpay/init`),
