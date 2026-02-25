@@ -17,20 +17,29 @@ import Image from "next/image";
 
 export default function MiCuentaPage() {
   const router = useRouter();
-  const { customer, isAuthenticated, logout } = useCustomer();
+  const { customer, isAuthenticated, isLoading: contextLoading, logout } = useCustomer();
   const notification = useNotification();
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<Order[]>([]);
   const [ordersLoading, setOrdersLoading] = useState(false);
 
   useEffect(() => {
+    // Esperar a que el contexto termine de cargar
+    if (contextLoading) {
+      return;
+    }
+
+    // Si no está autenticado después de cargar, redirigir
     if (!isAuthenticated) {
       router.push("/login?return=/mi-cuenta");
       return;
     }
 
-    fetchOrders();
-  }, [isAuthenticated, router]);
+    // Si está autenticado, cargar las órdenes
+    if (customer) {
+      fetchOrders();
+    }
+  }, [isAuthenticated, contextLoading, customer, router]);
 
   const fetchOrders = async () => {
     if (!customer) return;
@@ -97,11 +106,15 @@ export default function MiCuentaPage() {
     return labels[status] || status;
   };
 
-  if (loading || !isAuthenticated || !customer) {
+  // Mostrar loading mientras el contexto carga o mientras se cargan los datos
+  if (contextLoading || loading || !isAuthenticated || !customer) {
     return (
       <PageTemplate>
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <Text className="text-gray-600">Cargando tu cuenta...</Text>
+          </div>
         </div>
       </PageTemplate>
     );
