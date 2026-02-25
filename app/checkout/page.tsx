@@ -43,7 +43,7 @@ export default function CheckoutPage() {
   useEffect(() => {
     // Cargar tipos de envío disponibles
     ordersApi.getShippingTypes()
-      .then((types: ShippingOption[]) => {
+      .then((types) => {
         setShippingTypes(types);
         // Seleccionar el primero por defecto
         if (types.length > 0) {

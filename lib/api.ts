@@ -1,3 +1,5 @@
+import { ShippingOption } from '@/types';
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3004';
 
 // Validar que la URL esté configurada en producción
@@ -127,7 +129,7 @@ export const ordersApi = {
   },
   getById: (id: string) => apiClient.get(`/orders/${id}`),
   getByOrderNumber: (orderNumber: string) => apiClient.get(`/orders/number/${orderNumber}`),
-  getShippingTypes: () => apiClient.get('/orders/shipping/types'),
+  getShippingTypes: (): Promise<ShippingOption[]> => apiClient.get<ShippingOption[]>('/orders/shipping/types'),
   initiateWebpay: (orderId: string) => apiClient.post(`/orders/${orderId}/webpay/init`),
   confirmWebpay: (token: string) => apiClient.post('/orders/webpay/confirm', { token }),
   updateStatus: (id: string, data: { status: string; paymentStatus?: string }) => 
