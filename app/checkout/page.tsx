@@ -10,17 +10,19 @@ import { Heading } from "@/components/atoms/Heading";
 import { Text } from "@/components/atoms/Text";
 import { Button } from "@/components/atoms/Button";
 import { Card } from "@/components/atoms/Card";
-import { ArrowLeft, Lock, CreditCard } from "lucide-react";
+import { ArrowLeft, Lock, CreditCard, Truck } from "lucide-react";
 import Link from "next/link";
 import { ordersApi } from "@/lib/api";
-import { Order, WebpayResponse } from "@/types";
+import { Order, WebpayResponse, ShippingOption } from "@/types";
 
 export default function CheckoutPage() {
   const { items, getTotal, clearCart } = useCart();
   const notification = useNotification();
-  const { isAuthenticated } = useCustomer();
+  const { isAuthenticated, customer } = useCustomer();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [shippingTypes, setShippingTypes] = useState<ShippingOption[]>([]);
+  const [selectedShipping, setSelectedShipping] = useState<ShippingOption | null>(null);
   const [formData, setFormData] = useState({
     customerName: "",
     customerEmail: "",
@@ -28,6 +30,7 @@ export default function CheckoutPage() {
     shippingAddress: "",
     notes: "",
   });
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("es-CL", {
@@ -37,7 +40,57 @@ export default function CheckoutPage() {
     }).format(price);
   };
 
-  const total = getTotal();
+  useEffect(() => {
+    // Cargar tipos de envío disponibles
+    ordersApi.getShippingTypes()
+      .then((types: ShippingOption[]) => {
+        setShippingTypes(types);
+        // Seleccionar el primero por defecto
+        if (types.length > 0) {
+          setSelectedShipping(types[0]);
+        }
+      })
+      .catch((error) => {
+        console.error("Error al cargar tipos de envío:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    // Pre-llenar datos si el usuario está autenticado y aún no se han cargado
+    if (isAuthenticated && customer && !dataLoaded) {
+      // Construir dirección completa si hay información adicional
+      let fullAddress = customer.address || "";
+      if (customer.city || customer.region) {
+        const addressParts = [customer.address, customer.city, customer.region].filter(Boolean);
+        if (addressParts.length > 0) {
+          fullAddress = addressParts.join(", ");
+        }
+      }
+      
+      setFormData({
+        customerName: customer.fullName || "",
+        customerEmail: customer.email || "",
+        customerPhone: customer.phone || "",
+        shippingAddress: fullAddress,
+        notes: "",
+      });
+      setDataLoaded(true);
+    } else if (!isAuthenticated && dataLoaded) {
+      // Si el usuario se desloguea, limpiar los datos
+      setFormData({
+        customerName: "",
+        customerEmail: "",
+        customerPhone: "",
+        shippingAddress: "",
+        notes: "",
+      });
+      setDataLoaded(false);
+    }
+  }, [isAuthenticated, customer, dataLoaded]);
+
+  const subtotal = getTotal();
+  const shippingCost = selectedShipping?.price || 0;
+  const total = subtotal + shippingCost;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,6 +103,7 @@ export default function CheckoutPage() {
         customerEmail: formData.customerEmail,
         customerPhone: formData.customerPhone,
         shippingAddress: formData.shippingAddress,
+        shippingType: selectedShipping?.type,
         notes: formData.notes,
         items: items.map((item) => ({
           productId: item.product.id,
@@ -111,10 +165,28 @@ export default function CheckoutPage() {
             {/* Formulario */}
             <div className="lg:col-span-2">
               <Card className="p-6 sm:p-8">
-                <div className="flex items-center gap-2 mb-6">
-                  <Lock className="w-5 h-5 text-primary-600" />
-                  <Heading level={2} className="text-xl">Información de contacto</Heading>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-2">
+                    <Lock className="w-5 h-5 text-primary-600" />
+                    <Heading level={2} className="text-xl">Información de contacto</Heading>
+                  </div>
+                  {isAuthenticated && customer && (
+                    <div className="flex items-center gap-2 px-3 py-1 bg-primary-50 text-primary-700 rounded-lg text-sm">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>Usando datos de tu cuenta</span>
+                    </div>
+                  )}
                 </div>
+
+                {isAuthenticated && customer && (
+                  <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <Text className="text-sm text-blue-800">
+                      <strong>✓</strong> Tus datos han sido cargados automáticamente. Puedes editarlos si lo deseas.
+                    </Text>
+                  </div>
+                )}
 
                 <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                   <div>
@@ -163,16 +235,62 @@ export default function CheckoutPage() {
                   </div>
 
                   <div>
+                    <label htmlFor="shippingType" className="block text-sm font-medium text-gray-700 mb-2">
+                      <Truck className="w-4 h-4 inline mr-1" />
+                      Tipo de envío *
+                    </label>
+                    <div className="space-y-2">
+                      {shippingTypes.map((shipping) => (
+                        <label
+                          key={shipping.type}
+                          className={`flex items-start gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                            selectedShipping?.type === shipping.type
+                              ? "border-primary-500 bg-primary-50"
+                              : "border-gray-200 hover:border-gray-300"
+                          }`}
+                        >
+                          <input
+                            type="radio"
+                            name="shippingType"
+                            value={shipping.type}
+                            checked={selectedShipping?.type === shipping.type}
+                            onChange={() => setSelectedShipping(shipping)}
+                            className="mt-1"
+                          />
+                          <div className="flex-1">
+                            <div className="flex items-center justify-between mb-1">
+                              <Text className="font-semibold">{shipping.name}</Text>
+                              <Text className="font-bold text-primary-600">
+                                {formatPrice(shipping.price)}
+                              </Text>
+                            </div>
+                            <Text className="text-sm text-gray-600">{shipping.description}</Text>
+                            <Text className="text-xs text-gray-500 mt-1">
+                              Entrega estimada: {shipping.estimatedDays === 0 
+                                ? "Inmediato" 
+                                : `${shipping.estimatedDays} día${shipping.estimatedDays !== 1 ? "s" : ""}`}
+                            </Text>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
                     <label htmlFor="shippingAddress" className="block text-sm font-medium text-gray-700 mb-2">
-                      Dirección de entrega
+                      Dirección de entrega {selectedShipping?.type !== 'retiro_tienda' && '*'}
                     </label>
                     <textarea
                       id="shippingAddress"
+                      required={selectedShipping?.type !== 'retiro_tienda'}
+                      disabled={selectedShipping?.type === 'retiro_tienda'}
                       value={formData.shippingAddress}
                       onChange={(e) => setFormData({ ...formData, shippingAddress: e.target.value })}
                       rows={3}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                      placeholder="Calle Falsa 123, Comuna, Ciudad"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed"
+                      placeholder={selectedShipping?.type === 'retiro_tienda' 
+                        ? "No se requiere dirección para retiro en tienda" 
+                        : "Calle Falsa 123, Comuna, Ciudad"}
                     />
                   </div>
 
@@ -231,9 +349,15 @@ export default function CheckoutPage() {
                 <div className="border-t border-gray-200 pt-4 mt-4">
                   <div className="flex justify-between mb-2">
                     <Text className="text-gray-600">Subtotal</Text>
-                    <Text className="font-semibold">{formatPrice(total)}</Text>
+                    <Text className="font-semibold">{formatPrice(subtotal)}</Text>
                   </div>
-                  <div className="flex justify-between">
+                  {selectedShipping && selectedShipping.price > 0 && (
+                    <div className="flex justify-between mb-2">
+                      <Text className="text-gray-600">Envío ({selectedShipping.name})</Text>
+                      <Text className="font-semibold">{formatPrice(shippingCost)}</Text>
+                    </div>
+                  )}
+                  <div className="flex justify-between pt-2 border-t border-gray-200">
                     <Text className="font-bold text-lg">Total</Text>
                     <Text className="font-bold text-lg text-primary-600">{formatPrice(total)}</Text>
                   </div>

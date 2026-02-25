@@ -12,8 +12,8 @@ interface CategoryCardProps {
 export const CategoryCard = ({ category }: CategoryCardProps) => {
   return (
     <Link href={`/categorias/${category.slug}`}>
-      <Card className="group text-center p-4 sm:p-6 hover:border-primary-300 border-2 border-transparent transition-all">
-        <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-soft group-hover:shadow-glow transition-all duration-300 group-hover:scale-110">
+      <Card className="group text-center p-4 sm:p-6 hover:border-primary-300 border-2 border-transparent transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+        <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-md group-hover:shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
           {category.image ? (
             <img
               src={category.image}

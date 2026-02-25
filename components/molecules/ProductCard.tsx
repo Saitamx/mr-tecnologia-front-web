@@ -20,8 +20,8 @@ export const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <Link href={`/productos/${product.slug}`}>
-      <Card className="group overflow-hidden h-full flex flex-col">
-        <div className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
+      <Card className="group overflow-hidden h-full flex flex-col border-2 border-transparent hover:border-primary-200 hover:shadow-xl transition-all duration-300">
+        <div className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden rounded-t-xl">
           {product.image ? (
             <img
               src={product.image}
@@ -30,14 +30,15 @@ export const ProductCard = ({ product }: ProductCardProps) => {
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <ShoppingBag className="w-12 h-12 text-gray-400" />
+              <ShoppingBag className="w-10 h-10 sm:w-12 sm:h-12 text-gray-400" />
             </div>
           )}
           {product.isFeatured && (
-            <div className="absolute top-2 right-2 bg-primary-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
-              Destacado
+            <div className="absolute top-2 right-2 bg-gradient-to-r from-primary-600 to-primary-700 text-white text-xs font-semibold px-2.5 py-1 rounded-full shadow-md">
+              ⭐ Destacado
             </div>
           )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
         <div className="p-3 sm:p-4 flex flex-col flex-grow">
           <h3 className="font-semibold text-sm sm:text-base text-gray-900 mb-1 sm:mb-2 line-clamp-2 group-hover:text-primary-600 transition-colors">
@@ -48,14 +49,18 @@ export const ProductCard = ({ product }: ProductCardProps) => {
               {product.description}
             </p>
           )}
-          <div className="flex items-center justify-between mt-auto">
+          <div className="flex items-center justify-between mt-auto pt-2 border-t border-gray-100">
             <span className="text-base sm:text-lg font-bold text-primary-600">
               {formatPrice(product.price)}
             </span>
             {product.stock > 0 ? (
-              <span className="text-xs text-gray-500">Stock: {product.stock}</span>
+              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+                {product.stock} disponibles
+              </span>
             ) : (
-              <span className="text-xs text-red-500">Sin stock</span>
+              <span className="text-xs text-red-600 bg-red-50 px-2 py-1 rounded-full font-medium">
+                Sin stock
+              </span>
             )}
           </div>
         </div>
