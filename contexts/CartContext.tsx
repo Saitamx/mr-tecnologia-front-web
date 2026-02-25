@@ -58,8 +58,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         
         if (showNotification) {
           notification.showSuccess(
-            `🛒 ¡${product.name} agregado! (Total: ${newQuantity} ${newQuantity === 1 ? 'unidad' : 'unidades'})`,
-            3500
+            `✅ ¡${product.name} agregado al carrito! (${newQuantity} ${newQuantity === 1 ? 'unidad' : 'unidades'})`,
+            4000
           );
         }
         
@@ -79,9 +79,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         
         if (showNotification) {
           const message = quantity === 1 
-            ? `🛒 ¡${product.name} agregado al carrito!`
-            : `🛒 ¡${quantity} unidades de ${product.name} agregadas al carrito!`;
-          notification.showSuccess(message, 3500);
+            ? `✅ ¡${product.name} agregado al carrito! 🛒`
+            : `✅ ¡${quantity} unidades de ${product.name} agregadas al carrito! 🛒`;
+          notification.showSuccess(message, 4000);
         }
         
         return [...prevItems, { product, quantity }];

@@ -63,26 +63,32 @@ export const Toast = ({ message, type, onClose }: ToastProps) => {
     <div
       className={`
         pointer-events-auto
-        transform transition-all duration-300 ease-in-out
-        ${isVisible && !isExiting ? "translate-x-0 opacity-100 scale-100" : "translate-x-full opacity-0 scale-95"}
-        ${styles.bg} border rounded-xl shadow-lg p-3 sm:p-4
-        flex items-start gap-2 sm:gap-3
+        transform transition-all duration-500 ease-out
+        ${isVisible && !isExiting 
+          ? "translate-x-0 opacity-100 scale-100" 
+          : "translate-x-full opacity-0 scale-95"}
+        ${styles.bg} border-2 ${styles.bg.includes('green') ? 'border-green-300' : styles.bg.includes('red') ? 'border-red-300' : styles.bg.includes('yellow') ? 'border-yellow-300' : 'border-blue-300'} rounded-xl shadow-2xl p-4 sm:p-5
+        flex items-center gap-3 sm:gap-4
         w-full
+        backdrop-blur-sm
+        animate-slide-in-right
       `}
       role="alert"
     >
-      <div className={`flex-shrink-0 ${styles.iconColor}`}>
-        <Icon className="w-5 h-5" />
+      <div className={`flex-shrink-0 ${styles.iconColor} animate-bounce-subtle`}>
+        <Icon className="w-6 h-6 sm:w-7 sm:h-7" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className={`text-sm font-medium ${styles.text}`}>{message}</p>
+        <p className={`text-sm sm:text-base font-semibold ${styles.text} leading-relaxed`}>
+          {message}
+        </p>
       </div>
       <button
         onClick={handleClose}
-        className={`flex-shrink-0 ${styles.text} hover:opacity-70 transition-opacity p-1`}
+        className={`flex-shrink-0 ${styles.text} hover:opacity-70 transition-opacity p-1 rounded-full hover:bg-black/5`}
         aria-label="Cerrar notificación"
       >
-        <X className="w-4 h-4" />
+        <X className="w-5 h-5" />
       </button>
     </div>
   );

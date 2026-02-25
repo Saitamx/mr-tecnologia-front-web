@@ -16,30 +16,42 @@ import {
 
 export const Hero = () => {
   return (
-    <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-50 via-white to-primary-100">
-      {/* Fondo animado moderno */}
+    <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-blue-50">
+      {/* Fondo elegante y profesional */}
       <div className="absolute inset-0 w-full h-full -z-10 overflow-hidden">
-        {/* Gradientes de fondo animados */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary-100/50 via-blue-50/30 to-purple-100/50"></div>
+        {/* Patrón de cuadrícula sutil */}
+        <div 
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, #3b82f6 1px, transparent 1px),
+              linear-gradient(to bottom, #3b82f6 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px',
+          }}
+        ></div>
         
-        {/* Círculos grandes animados */}
-        <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-primary-300/20 to-blue-400/20 rounded-full blur-3xl animate-float-slow"></div>
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-gradient-to-br from-purple-300/20 to-pink-400/20 rounded-full blur-3xl animate-float-slow" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-br from-blue-300/15 to-cyan-400/15 rounded-full blur-3xl animate-float-slow" style={{ animationDelay: '4s' }}></div>
+        {/* Gradientes suaves y elegantes */}
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary-50/60 via-transparent to-blue-50/40"></div>
+        <div className="absolute bottom-0 right-0 w-full h-full bg-gradient-to-tl from-primary-100/30 via-transparent to-transparent"></div>
         
-        {/* Partículas pequeñas brillantes */}
-        {[...Array(80)].map((_, i) => {
-          const size = Math.random() * 6 + 2;
-          const delay = Math.random() * 8;
-          const duration = Math.random() * 4 + 3;
+        {/* Círculos de luz suaves y elegantes */}
+        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-gradient-to-br from-primary-200/15 to-blue-200/10 rounded-full blur-3xl animate-float-slow"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-gradient-to-tl from-blue-200/12 to-primary-200/8 rounded-full blur-3xl animate-float-slow" style={{ animationDelay: '3s' }}></div>
+        <div className="absolute top-1/2 right-1/3 w-[350px] h-[350px] bg-gradient-to-br from-primary-100/10 to-transparent rounded-full blur-2xl animate-float-slow" style={{ animationDelay: '6s' }}></div>
+        
+        {/* Partículas sutiles tipo "pixel" tecnológico */}
+        {[...Array(40)].map((_, i) => {
+          const size = Math.random() * 3 + 1;
+          const delay = Math.random() * 10;
+          const duration = Math.random() * 4 + 4;
           const left = Math.random() * 100;
           const top = Math.random() * 100;
-          const shape = Math.random() > 0.7 ? 'square' : 'circle';
           
           return (
             <div
               key={i}
-              className={`absolute ${shape === 'circle' ? 'rounded-full' : 'rounded-lg'} bg-gradient-to-br from-primary-400/40 via-blue-400/30 to-purple-400/40 animate-particle-float shadow-lg shadow-primary-300/50`}
+              className="absolute rounded-sm bg-primary-400/25 animate-tech-pulse"
               style={{
                 left: `${left}%`,
                 top: `${top}%`,
@@ -47,52 +59,69 @@ export const Hero = () => {
                 height: `${size}px`,
                 animationDelay: `${delay}s`,
                 animationDuration: `${duration}s`,
-                transform: `rotate(${Math.random() * 360}deg)`,
+                boxShadow: `0 0 ${size * 2}px rgba(59, 130, 246, 0.3)`,
               }}
             />
           );
         })}
         
-        {/* Líneas de conexión animadas */}
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={`line-${i}`}
-            className="absolute w-px bg-gradient-to-b from-primary-300/20 via-blue-300/30 to-transparent animate-line-glow"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              height: `${Math.random() * 200 + 100}px`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${Math.random() * 3 + 2}s`,
-              transform: `rotate(${Math.random() * 360}deg)`,
-            }}
-          />
-        ))}
-        
-        {/* Formas geométricas flotantes */}
-        {[...Array(12)].map((_, i) => {
-          const shapes = ['triangle', 'square', 'hexagon'];
-          const shape = shapes[Math.floor(Math.random() * shapes.length)];
-          const size = Math.random() * 40 + 20;
+        {/* Líneas de conexión sutiles tipo circuito */}
+        {[...Array(8)].map((_, i) => {
+          const angle = Math.random() * 360;
+          const length = Math.random() * 150 + 100;
           
           return (
             <div
-              key={`shape-${i}`}
-              className={`absolute animate-shape-float ${shape === 'triangle' ? 'triangle' : shape === 'hexagon' ? 'hexagon' : 'square-shape'} bg-gradient-to-br from-primary-400/20 to-blue-400/20 backdrop-blur-sm border border-primary-300/30`}
+              key={`circuit-${i}`}
+              className="absolute bg-gradient-to-r from-primary-300/10 via-primary-400/20 to-transparent animate-circuit-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                width: `${length}px`,
+                height: '1px',
+                animationDelay: `${Math.random() * 4}s`,
+                animationDuration: `${Math.random() * 3 + 2}s`,
+                transform: `rotate(${angle}deg)`,
+                transformOrigin: 'left center',
+              }}
+            />
+          );
+        })}
+        
+        {/* Formas geométricas minimalistas tipo iconos de apps */}
+        {[...Array(6)].map((_, i) => {
+          const size = Math.random() * 30 + 20;
+          const shapes = ['rounded-square', 'rounded-lg'];
+          const shape = shapes[Math.floor(Math.random() * shapes.length)];
+          
+          return (
+            <div
+              key={`icon-${i}`}
+              className={`absolute ${shape} bg-gradient-to-br from-primary-200/15 to-blue-200/10 border border-primary-200/20 backdrop-blur-sm animate-icon-float shadow-sm`}
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
                 width: `${size}px`,
                 height: `${size}px`,
-                animationDelay: `${Math.random() * 6}s`,
-                animationDuration: `${Math.random() * 5 + 4}s`,
+                animationDelay: `${Math.random() * 8}s`,
+                animationDuration: `${Math.random() * 6 + 5}s`,
+                transform: `rotate(${Math.random() * 45}deg)`,
               }}
             />
           );
         })}
         
-        {/* Efecto de brillo móvil */}
-        <div className="absolute inset-0 bg-gradient-radial from-transparent via-primary-200/10 to-transparent animate-shimmer"></div>
+        {/* Efecto de brillo sutil tipo pantalla */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary-50/5 to-transparent animate-shimmer-subtle"></div>
+        
+        {/* Overlay de textura sutil */}
+        <div 
+          className="absolute inset-0 opacity-[0.02]"
+          style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, #3b82f6 1px, transparent 0)`,
+            backgroundSize: '40px 40px',
+          }}
+        ></div>
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">

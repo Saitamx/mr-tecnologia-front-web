@@ -84,7 +84,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
       }}
     >
       {children}
-      <div className="fixed top-4 left-4 right-4 sm:left-auto sm:right-4 z-50 flex flex-col gap-2 max-w-sm sm:max-w-md pointer-events-none mx-auto sm:mx-0">
+      <div className="fixed top-4 left-4 right-4 sm:left-auto sm:right-4 z-[9999] flex flex-col gap-2 max-w-sm sm:max-w-md pointer-events-none mx-auto sm:mx-0">
         {toasts.map((toast) => (
           <Toast
             key={toast.id}
