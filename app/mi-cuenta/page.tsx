@@ -175,10 +175,13 @@ export default function MiCuentaPage() {
                     <div>
                       <Text className="text-sm text-purple-700 font-medium mb-1">Miembro desde</Text>
                       <Text className="text-lg font-bold text-purple-900">
-                        {new Date(customer.createdAt || new Date()).toLocaleDateString('es-CL', { 
-                          month: 'short', 
-                          year: 'numeric' 
-                        })}
+                        {customer.createdAt 
+                          ? new Date(customer.createdAt).toLocaleDateString('es-CL', { 
+                              month: 'short', 
+                              year: 'numeric' 
+                            })
+                          : 'Reciente'
+                        }
                       </Text>
                     </div>
                     <div className="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center">

@@ -10,6 +10,10 @@ interface Customer {
   address?: string;
   city?: string;
   region?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  lastLogin?: string;
+  isActive?: boolean;
 }
 
 interface CustomerContextType {
