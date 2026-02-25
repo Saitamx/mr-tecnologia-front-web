@@ -18,12 +18,23 @@ const headingSizes = {
 };
 
 export const Heading = ({ level, children, className = "" }: HeadingProps) => {
-  const Tag = `h${level}` as keyof JSX.IntrinsicElements;
   const sizeClass = headingSizes[level];
+  const combinedClassName = `${sizeClass} text-gray-900 ${className}`;
   
-  return (
-    <Tag className={`${sizeClass} text-gray-900 ${className}`}>
-      {children}
-    </Tag>
-  );
+  switch (level) {
+    case 1:
+      return <h1 className={combinedClassName}>{children}</h1>;
+    case 2:
+      return <h2 className={combinedClassName}>{children}</h2>;
+    case 3:
+      return <h3 className={combinedClassName}>{children}</h3>;
+    case 4:
+      return <h4 className={combinedClassName}>{children}</h4>;
+    case 5:
+      return <h5 className={combinedClassName}>{children}</h5>;
+    case 6:
+      return <h6 className={combinedClassName}>{children}</h6>;
+    default:
+      return <h1 className={combinedClassName}>{children}</h1>;
+  }
 };
