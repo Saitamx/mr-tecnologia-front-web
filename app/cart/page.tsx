@@ -99,27 +99,27 @@ export default function CartPage() {
                       {/* Controles */}
                       <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2 border border-gray-300 rounded-lg">
-                          <button
-                            onClick={() => {
-                              if (item.quantity > 1) {
-                                updateQuantity(item.product.id, item.quantity - 1);
-                              }
-                            }}
-                            className="p-2 hover:bg-gray-100 transition-colors"
-                            disabled={item.quantity <= 1}
-                          >
-                            <Minus className="w-4 h-4" />
-                          </button>
+                        <button
+                          onClick={() => {
+                            if (item.quantity > 1) {
+                              updateQuantity(item.product.id, item.quantity - 1, true);
+                            }
+                          }}
+                          className="p-2 hover:bg-gray-100 transition-colors"
+                          disabled={item.quantity <= 1}
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
                           <span className="px-3 py-1 min-w-[3rem] text-center font-semibold">
                             {item.quantity}
                           </span>
                           <button
                             onClick={() => {
                               if (item.quantity >= item.product.stock) {
-                                notification.showWarning(`Solo hay ${item.product.stock} unidades disponibles`);
+                                notification.showWarning(`⚠️ Solo hay ${item.product.stock} unidades disponibles`);
                                 return;
                               }
-                              updateQuantity(item.product.id, item.quantity + 1);
+                              updateQuantity(item.product.id, item.quantity + 1, true);
                             }}
                             className="p-2 hover:bg-gray-100 transition-colors"
                             disabled={item.quantity >= item.product.stock}
@@ -153,8 +153,7 @@ export default function CartPage() {
                 <Button 
                   variant="ghost" 
                   onClick={() => {
-                    clearCart();
-                    notification.showInfo("Carrito limpiado");
+                    clearCart(true);
                   }} 
                   className="text-red-600 hover:text-red-700"
                 >

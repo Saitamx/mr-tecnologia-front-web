@@ -14,7 +14,7 @@ interface CartContextType {
   addItem: (product: Product, quantity?: number, showNotification?: boolean) => void;
   removeItem: (productId: string, showNotification?: boolean) => void;
   updateQuantity: (productId: string, quantity: number, showNotification?: boolean) => void;
-  clearCart: () => void;
+  clearCart: (showNotification?: boolean) => void;
   getTotal: () => number;
   getItemCount: () => number;
 }
@@ -51,14 +51,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         const newQuantity = existingItem.quantity + quantity;
         if (newQuantity > product.stock) {
           if (showNotification) {
-            notification.showWarning(`⚠️ Solo hay ${product.stock} unidades disponibles de ${product.name}`);
+            notification.showWarning(`⚠️ Solo hay ${product.stock} unidades disponibles de "${product.name}"`);
           }
           return prevItems;
         }
         
         if (showNotification) {
           notification.showSuccess(
-            `✅ ¡${product.name} agregado al carrito! (Total: ${newQuantity} ${newQuantity === 1 ? 'unidad' : 'unidades'})`,
+            `🛒 ¡${product.name} agregado! (Total: ${newQuantity} ${newQuantity === 1 ? 'unidad' : 'unidades'})`,
             3500
           );
         }
@@ -72,15 +72,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         // Si el producto no está en el carrito, agregarlo
         if (quantity > product.stock) {
           if (showNotification) {
-            notification.showWarning(`⚠️ Solo hay ${product.stock} unidades disponibles de ${product.name}`);
+            notification.showWarning(`⚠️ Solo hay ${product.stock} unidades disponibles de "${product.name}"`);
           }
           return prevItems;
         }
         
         if (showNotification) {
           const message = quantity === 1 
-            ? `✅ ¡${product.name} agregado al carrito! 🛒`
-            : `✅ ¡${quantity} unidades de ${product.name} agregadas al carrito! 🛒`;
+            ? `🛒 ¡${product.name} agregado al carrito!`
+            : `🛒 ¡${quantity} unidades de ${product.name} agregadas al carrito!`;
           notification.showSuccess(message, 3500);
         }
         
@@ -93,7 +93,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setItems((prevItems) => {
       const item = prevItems.find((item) => item.product.id === productId);
       if (item && showNotification) {
-        notification.showSuccess(`${item.product.name} eliminado del carrito`, 2500);
+        notification.showSuccess(`🗑️ "${item.product.name}" eliminado del carrito`, 2500);
       }
       return prevItems.filter((item) => item.product.id !== productId);
     });
@@ -109,9 +109,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       const item = prevItems.find((item) => item.product.id === productId);
       if (item && quantity > item.product.stock) {
         if (showNotification) {
-          notification.showWarning(`Solo hay ${item.product.stock} unidades disponibles de ${item.product.name}`);
+          notification.showWarning(`⚠️ Solo hay ${item.product.stock} unidades disponibles de "${item.product.name}"`);
         }
         return prevItems;
+      }
+
+      if (item && showNotification && quantity !== item.quantity) {
+        notification.showSuccess(`📦 Cantidad actualizada: ${quantity} ${quantity === 1 ? 'unidad' : 'unidades'}`, 2000);
       }
 
       return prevItems.map((item) =>
@@ -120,9 +124,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const clearCart = () => {
+  const clearCart = (showNotification: boolean = true) => {
     setItems([]);
     localStorage.removeItem("cart");
+    if (showNotification) {
+      notification.showSuccess("🗑️ Carrito vaciado", 2500);
+    }
   };
 
   const getTotal = () => {

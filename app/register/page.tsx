@@ -81,7 +81,7 @@ export default function RegisterPage() {
       // Guardar token y actualizar contexto
       login(token, customer);
 
-      notification.showSuccess("¡Registro exitoso! Bienvenido a MR Tecnología");
+      notification.showSuccess("🎉 ¡Registro exitoso! Bienvenido a MR Tecnología");
       
       // Redirigir al inicio
       setTimeout(() => {
@@ -94,15 +94,15 @@ export default function RegisterPage() {
       let errorMessage = "Error al registrar. Por favor, intenta nuevamente.";
       
       if (error.status === 409) {
-        errorMessage = "Este email ya está registrado. ¿Ya tienes una cuenta? Inicia sesión o usa otro email.";
+        errorMessage = "❌ Este email ya está registrado. ¿Ya tienes una cuenta? Inicia sesión o usa otro email.";
       } else if (error.status === 400) {
-        errorMessage = error.message || "Por favor, completa todos los campos requeridos correctamente.";
+        errorMessage = error.message ? `❌ ${error.message}` : "❌ Por favor, completa todos los campos requeridos correctamente.";
       } else if (error.status === 401) {
-        errorMessage = "No se pudo crear la cuenta. Verifica tus datos e intenta nuevamente.";
+        errorMessage = "❌ No se pudo crear la cuenta. Verifica tus datos e intenta nuevamente.";
       } else if (error.message) {
-        errorMessage = error.message;
+        errorMessage = `❌ ${error.message}`;
       } else if (error.error?.message) {
-        errorMessage = error.error.message;
+        errorMessage = `❌ ${error.error.message}`;
       }
       
       notification.showError(errorMessage);

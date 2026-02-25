@@ -1,86 +1,144 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { Button } from "../atoms/Button";
-import { Heading } from "../atoms/Heading";
-import { Text } from "../atoms/Text";
-import { Sparkles, MapPin } from "lucide-react";
+import { Button } from "@/components/atoms/Button";
+import { Heading } from "@/components/atoms/Heading";
+import { Text } from "@/components/atoms/Text";
+import { 
+  ShoppingBag, 
+  ArrowRight, 
+  Sparkles, 
+  Zap,
+  Smartphone,
+  Palette,
+  Gift
+} from "lucide-react";
+import { ThreeBackground } from "./ThreeBackground";
 
 export const Hero = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
-    <section className="relative bg-gradient-to-br from-primary-600 via-primary-700 to-primary-800 text-white overflow-hidden">
-      <div className="absolute inset-0 opacity-10" suppressHydrationWarning>
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                           radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                           radial-gradient(circle at 40% 20%, rgba(255,255,255,0.1) 0%, transparent 50%)`
-        }}></div>
+    <section className="relative min-h-[85vh] sm:min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-50 via-white to-primary-100">
+      <ThreeBackground />
+      
+      {/* Gradientes decorativos */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary-200/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
-      <div className="relative container mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-24" suppressHydrationWarning>
-        <div className="max-w-3xl mx-auto text-center space-y-4 sm:space-y-6 md:space-y-8 animate-fade-in" suppressHydrationWarning>
-          <div className="flex justify-center mb-4 sm:mb-6" suppressHydrationWarning>
-            <div className="relative" suppressHydrationWarning>
-              <div className="absolute inset-0 bg-white/20 rounded-full blur-xl animate-float" suppressHydrationWarning></div>
-              <div className="relative bg-white/10 backdrop-blur-sm p-4 sm:p-6 rounded-3xl border border-white/20 shadow-glow" suppressHydrationWarning>
-                <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full overflow-hidden animate-scale-in">
-                  <Image
-                    src="/logo-mr-tecnologia.jpg"
-                    alt="MR Tecnología"
-                    fill
-                    className="object-cover"
-                    priority
-                  />
-                </div>
-              </div>
-            </div>
+
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Badge animado */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-primary-200 shadow-lg mb-6 sm:mb-8 animate-fade-in">
+            <Sparkles className="w-4 h-4 text-primary-600 animate-spin-slow" />
+            <Text className="text-sm font-semibold text-primary-700">
+              Accesorios Tecnológicos Premium
+            </Text>
           </div>
-          <Heading level={1} className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-tight">
-            MR Tecnología
+
+          {/* Título principal */}
+          <Heading 
+            level={1} 
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-4 sm:mb-6 text-gray-900 leading-tight"
+          >
+            <span className="block mb-2">Accesorios que</span>
+            <span className="block bg-gradient-to-r from-primary-600 via-blue-600 to-primary-700 bg-clip-text text-transparent animate-gradient">
+              Transforman tu Dispositivo
+            </span>
           </Heading>
-          <Text className="text-sm sm:text-base md:text-lg text-white/90 max-w-2xl mx-auto text-balance">
-            Accesorios tecnológicos de calidad. Carcasas personalizadas, productos JBL, Samsung y más. 
-            Encuéntranos en Versluys SPP.
+
+          {/* Descripción */}
+          <Text className="text-base sm:text-lg md:text-xl text-gray-700 mb-8 sm:mb-10 max-w-2xl mx-auto leading-relaxed">
+            Descubre nuestra colección exclusiva de carcasas personalizadas, 
+            accesorios premium y productos tecnológicos de las mejores marcas. 
+            <span className="block mt-2 font-semibold text-primary-700">
+              Calidad, estilo y personalización en un solo lugar.
+            </span>
           </Text>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-4 sm:pt-6" suppressHydrationWarning>
-            <Link href="/productos" className="w-full sm:w-auto">
+
+          {/* Botones CTA */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12 sm:mb-16">
+            <Link href="/productos">
               <Button 
                 size="lg" 
-                variant="secondary"
-                className="w-full sm:w-auto shadow-large hover:shadow-xl transition-all duration-300 hover:scale-105"
+                className="group shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800"
               >
-                <Sparkles className="w-5 h-5" />
-                Ver Productos
+                <ShoppingBag className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                Explorar Productos
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-            <Link href="/categorias" className="w-full sm:w-auto">
+            <Link href="/categorias">
               <Button 
-                size="lg" 
                 variant="outline" 
-                className="w-full sm:w-auto border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 backdrop-blur-sm transition-all duration-300"
+                size="lg"
+                className="group border-2 border-primary-300 hover:border-primary-500 hover:bg-primary-50 shadow-lg hover:shadow-xl transition-all duration-300"
               >
-                <MapPin className="w-5 h-5" />
-                Categorías
+                <Sparkles className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+                Ver Categorías
               </Button>
             </Link>
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 pt-4 sm:pt-6 text-sm sm:text-base" suppressHydrationWarning>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">🛒</span>
-              <span className="text-white/90">Tienda Física</span>
+
+          {/* Características destacadas */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-3xl mx-auto">
+            <div className="group p-4 sm:p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-primary-100 hover:border-primary-300 hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-primary-500 to-primary-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                <Smartphone className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+              </div>
+              <Text className="text-xs sm:text-sm font-semibold text-gray-800 mb-1">Personalización</Text>
+              <Text className="text-xs text-gray-600">Carcasas únicas</Text>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">✨</span>
-              <span className="text-white/90">Personalizadas</span>
+
+            <div className="group p-4 sm:p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-primary-100 hover:border-primary-300 hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                <Palette className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+              </div>
+              <Text className="text-xs sm:text-sm font-semibold text-gray-800 mb-1">Diseño</Text>
+              <Text className="text-xs text-gray-600">Estilo premium</Text>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">📍</span>
-              <span className="text-white/90">Versluys SPP</span>
+
+            <div className="group p-4 sm:p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-primary-100 hover:border-primary-300 hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                <Zap className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+              </div>
+              <Text className="text-xs sm:text-sm font-semibold text-gray-800 mb-1">Rápido</Text>
+              <Text className="text-xs text-gray-600">Entrega express</Text>
+            </div>
+
+            <div className="group p-4 sm:p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-primary-100 hover:border-primary-300 hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                <Gift className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+              </div>
+              <Text className="text-xs sm:text-sm font-semibold text-gray-800 mb-1">Calidad</Text>
+              <Text className="text-xs text-gray-600">Garantizada</Text>
             </div>
           </div>
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 bg-gradient-to-t from-white to-transparent" suppressHydrationWarning></div>
+
+      {/* Onda decorativa inferior */}
+      <div className="absolute bottom-0 left-0 right-0">
+        <svg 
+          viewBox="0 0 1440 120" 
+          fill="none" 
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full h-16 sm:h-24 md:h-32"
+        >
+          <path 
+            d="M0,64L48,69.3C96,75,192,85,288,80C384,75,480,53,576,48C672,43,768,53,864,58.7C960,64,1056,64,1152,58.7C1248,53,1344,43,1392,37.3L1440,32L1440,120L1392,120C1344,120,1248,120,1152,120C1056,120,960,120,864,120C768,120,672,120,576,120C480,120,384,120,288,120C192,120,96,120,48,120L0,120Z" 
+            fill="white"
+            className="animate-wave"
+          />
+        </svg>
+      </div>
     </section>
   );
 };

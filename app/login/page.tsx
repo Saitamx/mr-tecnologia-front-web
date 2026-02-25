@@ -55,7 +55,7 @@ export default function LoginPage() {
       // Guardar token y actualizar contexto
       login(token, customer);
 
-      notification.showSuccess(`¡Bienvenido de nuevo, ${customer.fullName}!`);
+      notification.showSuccess(`👋 ¡Bienvenido de nuevo, ${customer.fullName}!`);
       
       // Redirigir al inicio o a la página anterior
       setTimeout(() => {
@@ -69,17 +69,17 @@ export default function LoginPage() {
       let errorMessage = "Error al iniciar sesión. Por favor, intenta nuevamente.";
       
       if (error.status === 401) {
-        errorMessage = "Email o contraseña incorrectos. Verifica tus credenciales e intenta nuevamente.";
+        errorMessage = "❌ Email o contraseña incorrectos. Verifica tus credenciales e intenta nuevamente.";
       } else if (error.status === 400) {
-        errorMessage = "Por favor, completa todos los campos correctamente.";
+        errorMessage = "❌ Por favor, completa todos los campos correctamente.";
       } else if (error.status === 404) {
-        errorMessage = "Usuario no encontrado. Verifica tu email o regístrate si no tienes cuenta.";
+        errorMessage = "❌ Usuario no encontrado. Verifica tu email o regístrate si no tienes cuenta.";
       } else if (error.message && error.message.includes("Credenciales")) {
-        errorMessage = "Email o contraseña incorrectos. Verifica tus credenciales e intenta nuevamente.";
+        errorMessage = "❌ Email o contraseña incorrectos. Verifica tus credenciales e intenta nuevamente.";
       } else if (error.message) {
-        errorMessage = error.message;
+        errorMessage = `❌ ${error.message}`;
       } else if (error.error?.message) {
-        errorMessage = error.error.message;
+        errorMessage = `❌ ${error.error.message}`;
       }
       
       notification.showError(errorMessage);

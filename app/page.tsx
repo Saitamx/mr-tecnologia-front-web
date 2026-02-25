@@ -20,7 +20,11 @@ import {
   Truck, 
   Star,
   TrendingUp,
-  Zap
+  Zap,
+  Package,
+  Award,
+  Heart,
+  CheckCircle
 } from "lucide-react";
 import { Button } from "@/components/atoms/Button";
 import { Card } from "@/components/atoms/Card";
@@ -58,33 +62,33 @@ export default function Home() {
       <section className="py-8 sm:py-12 bg-white">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-            <Card className="p-4 sm:p-6 text-center border-2 border-transparent hover:border-primary-200 hover:shadow-lg transition-all duration-300">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md">
+            <Card className="group p-4 sm:p-6 text-center border-2 border-transparent hover:border-primary-200 hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
                 <Store className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
               </div>
               <Heading level={3} className="text-sm sm:text-base font-semibold mb-1">Tienda Física</Heading>
               <Text className="text-xs sm:text-sm text-gray-600">Visítanos en persona</Text>
             </Card>
             
-            <Card className="p-4 sm:p-6 text-center border-2 border-transparent hover:border-primary-200 hover:shadow-lg transition-all duration-300">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
+            <Card className="group p-4 sm:p-6 text-center border-2 border-transparent hover:border-primary-200 hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
                 <Wand2 className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
               </div>
               <Heading level={3} className="text-sm sm:text-base font-semibold mb-1">Personalizadas</Heading>
               <Text className="text-xs sm:text-sm text-gray-600">Carcasas a tu medida</Text>
             </Card>
             
-            <Card className="p-4 sm:p-6 text-center border-2 border-transparent hover:border-primary-200 hover:shadow-lg transition-all duration-300">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-md">
+            <Card className="group p-4 sm:p-6 text-center border-2 border-transparent hover:border-primary-200 hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
                 <Truck className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
               </div>
               <Heading level={3} className="text-sm sm:text-base font-semibold mb-1">Envío Rápido</Heading>
               <Text className="text-xs sm:text-sm text-gray-600">A todo Chile</Text>
             </Card>
             
-            <Card className="p-4 sm:p-6 text-center border-2 border-transparent hover:border-primary-200 hover:shadow-lg transition-all duration-300">
-              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-md">
-                <Shield className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
+            <Card className="group p-4 sm:p-6 text-center border-2 border-transparent hover:border-primary-200 hover:shadow-xl transition-all duration-300 hover:scale-105">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 mx-auto mb-3 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                <Award className="w-6 h-6 sm:w-7 sm:h-7 text-white" />
               </div>
               <Heading level={3} className="text-sm sm:text-base font-semibold mb-1">Garantía</Heading>
               <Text className="text-xs sm:text-sm text-gray-600">Productos de calidad</Text>
@@ -220,23 +224,23 @@ export default function Home() {
               Ofrecemos carcasas personalizadas, productos de las mejores marcas y atención personalizada.
             </Text>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-              <Card className="bg-white/10 backdrop-blur-sm border-2 border-white/20 p-6 hover:bg-white/20 transition-all duration-300">
-                <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center">
-                  <Store className="w-6 h-6 text-white" />
+              <Card className="group bg-white/10 backdrop-blur-sm border-2 border-white/20 p-6 hover:bg-white/20 hover:scale-105 transition-all duration-300">
+                <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Package className="w-6 h-6 text-white" />
                 </div>
                 <Heading level={3} className="text-lg mb-2 text-white">Tienda Física</Heading>
                 <Text className="text-sm text-white/80">Visítanos en persona</Text>
               </Card>
-              <Card className="bg-white/10 backdrop-blur-sm border-2 border-white/20 p-6 hover:bg-white/20 transition-all duration-300">
-                <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center">
-                  <Wand2 className="w-6 h-6 text-white" />
+              <Card className="group bg-white/10 backdrop-blur-sm border-2 border-white/20 p-6 hover:bg-white/20 hover:scale-105 transition-all duration-300">
+                <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Heart className="w-6 h-6 text-white" />
                 </div>
                 <Heading level={3} className="text-lg mb-2 text-white">Personalizadas</Heading>
                 <Text className="text-sm text-white/80">Carcasas a tu medida</Text>
               </Card>
-              <Card className="bg-white/10 backdrop-blur-sm border-2 border-white/20 p-6 hover:bg-white/20 transition-all duration-300">
-                <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center">
-                  <Star className="w-6 h-6 text-white" />
+              <Card className="group bg-white/10 backdrop-blur-sm border-2 border-white/20 p-6 hover:bg-white/20 hover:scale-105 transition-all duration-300">
+                <div className="w-12 h-12 mx-auto mb-3 bg-white/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <CheckCircle className="w-6 h-6 text-white" />
                 </div>
                 <Heading level={3} className="text-lg mb-2 text-white">Calidad</Heading>
                 <Text className="text-sm text-white/80">Productos premium</Text>
