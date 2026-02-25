@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { PageTemplate } from "@/components/templates/PageTemplate";
 import { useCart } from "@/contexts/CartContext";
@@ -8,12 +8,12 @@ import { Heading } from "@/components/atoms/Heading";
 import { Text } from "@/components/atoms/Text";
 import { Button } from "@/components/atoms/Button";
 import { Card } from "@/components/atoms/Card";
-import { CheckCircle, XCircle, Loader2, ShoppingBag } from "lucide-react";
+import { CheckCircle, XCircle, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { ordersApi } from "@/lib/api";
 import { Order } from "@/types";
 
-export default function CheckoutConfirmPage() {
+function CheckoutConfirmContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const { clearCart } = useCart();
@@ -159,5 +159,24 @@ export default function CheckoutConfirmPage() {
         </div>
       </div>
     </PageTemplate>
+  );
+}
+
+export default function CheckoutConfirmPage() {
+  return (
+    <Suspense fallback={
+      <PageTemplate>
+        <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="max-w-md mx-auto text-center">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-600 mx-auto mb-6"></div>
+              <Heading level={1} className="mb-4">Cargando...</Heading>
+            </div>
+          </div>
+        </div>
+      </PageTemplate>
+    }>
+      <CheckoutConfirmContent />
+    </Suspense>
   );
 }
